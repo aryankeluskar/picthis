@@ -18,3 +18,24 @@
 ```bash
 npm install -g picthis
 ```
+
+## Usage
+
+```bash
+npx picthis [directory] [options]
+```
+
+Converts images to WebP format and automatically updates file references in your codebase.
+
+| Flag | Description |
+|------|-------------|
+| `-w, --write` | Actually perform the conversion (default: preview mode) |
+| `-r, --replace` | Replace original files instead of keeping them |
+
+**Examples:**
+```bash
+picthis                    # Preview conversion in current directory
+picthis --write            # Convert images in current directory  
+picthis ./assets --write   # Convert images in assets folder
+picthis --write --replace  # Convert and remove original files
+```
