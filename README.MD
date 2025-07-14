@@ -11,6 +11,7 @@
 <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/picthis.svg?style=flat-square"></a>
 <a href="https://x.com/intent/follow?screen_name=aryankeluscar">
 <img alt="Follow Aryan on X" src="https://img.shields.io/badge/%40aryankeluscar-9f9f9f?style=flat-square&logo=x&labelColor=555"></a>
+<a href="https://deepwiki.com/aryankeluskar/picthis"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
 ## Installation
