@@ -1,6 +1,6 @@
 {
   "name": "picthis",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "This CLI tool converts images to WebP format and auto-updates all references for better web performance",
   "main": "index.js",
   "bin": {

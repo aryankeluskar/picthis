@@ -291,16 +291,24 @@ function formatFileSize(bytes) {
 }
 
 function displayResultsTable(results, options) {
+  // Calculate dynamic width for file column based on terminal width
+  const terminalWidth = process.stdout.columns || 80; // Default to 80 if not available
+  const fixedColumnsWidth = 8 + 12 + 12 + 12; // Type + Original + WebP + Savings
+  const tableOverhead = 10; // Account for borders, padding, etc.
+  
+  let fileColumnWidth = terminalWidth - fixedColumnsWidth - tableOverhead;
+  
+  // Apply min/max constraints
+  fileColumnWidth = Math.max(5, Math.min(100, fileColumnWidth));
+  
   const table = new Table({
     head: ['File', 'Type', 'Original', 'WebP', 'Savings'],
-    colWidths: [30, 8, 12, 12, 12]
+    colWidths: [fileColumnWidth, 8, 12, 12, 12]
   });
   
   results.forEach(result => {
     const originalSizeText = chalk.red(formatFileSize(result.originalSize));
-    const webpSizeText = options.write 
-      ? chalk.green(formatFileSize(result.webpSize))
-      : chalk.green(`${formatFileSize(result.webpSize)} (predicted)`);
+    const webpSizeText = chalk.green(formatFileSize(result.webpSize));
     
     const savingsText = result.savings > 0 
       ? chalk.green(`${result.savings}%`) 
