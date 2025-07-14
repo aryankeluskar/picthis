@@ -84,7 +84,7 @@ aryank@mac aryankeluskar.com % npx picthis
 
 ? Do you want to proceed with converting these files? Yes
 
-🚀 Starting conversion...
+Starting conversion...
 
 📸 Converting images...
 
@@ -100,7 +100,7 @@ aryank@mac aryankeluskar.com % npx picthis
    ✅ public/cropped-asu-icon.png → public/cropped-asu-icon.webp (59% smaller)
    ✅ public/banner.png → public/banner.webp (73% smaller)
 
-🔄 Updating image references in code files...
+Updating image references in code files...
 📋 Found 48 code files to check for references
    ✅ Updated 1 reference(s) in src/app/gcsp/index.html
    ✅ Updated 2 reference(s) in src/app/gcsp/furi.html
@@ -109,7 +109,7 @@ aryank@mac aryankeluskar.com % npx picthis
    ✅ Updated 1 reference(s) in src/components/hometown-section.tsx
    ✅ Updated 2 reference(s) in src/app/layout.tsx
 
-📊 Total references updated: 11
+Total references updated: 11
 
 ✅ Processing complete!
 ```

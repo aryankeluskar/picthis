@@ -83,14 +83,14 @@ async function analyzeImages(directory, options) {
       ]);
 
       if (shouldProceed) {
-        console.log("\n🚀 Starting conversion...\n");
+        console.log(chalk.green("\nStarting conversion...\n"));
 
         // Recursively call with write mode enabled
         const writeOptions = { ...options, write: true };
         await convertImages(directory, imageFiles, writeOptions);
 
         // Update references in code files
-        console.log("\n🔄 Updating image references in code files...");
+        console.log("\nUpdating image references in code files...");
         await updateReferences(directory, imageFiles, writeOptions);
 
         console.log("\n✅ Processing complete!");
@@ -101,7 +101,7 @@ async function analyzeImages(directory, options) {
       }
     } else if (options.write) {
       // Update references in code files if write mode is enabled
-      console.log("\n🔄 Updating image references in code files...");
+      console.log("\nUpdating image references in code files...");
       await updateReferences(directory, imageFiles, options);
 
       console.log("\n✅ Processing complete!");
@@ -383,7 +383,7 @@ async function updateReferences(directory, imageFiles, options) {
     }
   }
 
-  console.log(`\n📊 Total references updated: ${totalReferences}`);
+  console.log(chalk.green(`\nTotal references updated: ${totalReferences}`));
 }
 
 function formatFileSize(bytes) {

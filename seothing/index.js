@@ -42,7 +42,7 @@ async function analyzeImages(directory, options) {
     
     // Update references in code files if write mode is enabled
     if (options.write) {
-      console.log('\n🔄 Updating image references in code files...');
+      console.log('\nUpdating image references in code files...');
       await updateReferences(directory, imageFiles, options);
     }
     
@@ -160,7 +160,7 @@ async function updateReferences(directory, imageFiles, options) {
     }
   }
   
-  console.log(`\n📊 Total references updated: ${totalReferences}`);
+  console.log(`\nTotal references updated: ${totalReferences}`);
 }
 
 function formatFileSize(bytes) {
