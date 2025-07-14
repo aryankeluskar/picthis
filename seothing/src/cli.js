@@ -19,6 +19,7 @@ program
       const logo = await renderFilled('seothing', {
         palette: 'grad-blue',
         fill: 'gradient',
+        direction: 'horizontal',
       });
       
       // Analyze images in the directory
