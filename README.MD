@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://github.com/aryankeluskar/picthis/blob/master/picthis/assets/PicThis.png?raw=true" alt="PicThis Banner" />
+<img src="https://raw.githubusercontent.com/aryankeluskar/picthis/refs/heads/master/assets/PicThis.png" alt="PicThis Banner" />
 </div>
 
 <h2 align="center">CLI tool that converts images to WebP format and auto-updates all references for better web performance.</h2>
