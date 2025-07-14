@@ -4,6 +4,7 @@ const sharp = require('sharp');
 const glob = require('glob');
 const chalk = require('chalk');
 const Table = require('cli-table3');
+const inquirer = require('inquirer');
 
 // Image extensions that can be converted to WebP
 const CONVERTIBLE_EXTENSIONS = [
@@ -18,7 +19,8 @@ const CODE_EXTENSIONS = [
 
 async function analyzeImages(directory, options) {
   try {
-    console.log(`\n🔍 Processing images in: ${path.resolve(directory)}`);
+    console.log("Welcome to PicThis! This is a CLI tool to convert images to WebP format and auto-update references for better web performance."); 
+    console.log(`\n🔍 Finding images in: ${path.resolve(directory)}`);
     
     // Check if directory exists
     if (!await fs.pathExists(directory)) {
@@ -50,15 +52,38 @@ async function analyzeImages(directory, options) {
       displayResultsTable(results, options);
     }
     
-    // Update references in code files if write mode is enabled
-    if (options.write) {
+    // If not in write mode, ask user if they want to proceed
+    if (!options.write && results.length > 0) {
+      const { shouldProceed } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'shouldProceed',
+          message: chalk.cyan('Do you want to proceed with converting these files?'),
+          default: true
+        }
+      ]);
+      
+      if (shouldProceed) {
+        console.log('\n🚀 Starting conversion...\n');
+        
+        // Recursively call with write mode enabled
+        const writeOptions = { ...options, write: true };
+        await convertImages(directory, imageFiles, writeOptions);
+        
+        // Update references in code files
+        console.log('\n🔄 Updating image references in code files...');
+        await updateReferences(directory, imageFiles, writeOptions);
+        
+        console.log('\n✅ Processing complete!');
+      } else {
+        console.log('\n👋 Review Complete. Run with --write flag to proceed with conversion.');
+      }
+    } else if (options.write) {
+      // Update references in code files if write mode is enabled
       console.log('\n🔄 Updating image references in code files...');
       await updateReferences(directory, imageFiles, options);
-    }
-    
-    console.log('\n✅ Processing complete!');
-    if (!options.write) {
-      console.log('💡 Run with --write flag to actually perform the conversion');
+      
+      console.log('\n✅ Processing complete!');
     }
     
   } catch (error) {
@@ -77,6 +102,61 @@ async function findImages(directory) {
   }
   
   return imageFiles;
+}
+
+async function convertImages(directory, imageFiles, options) {
+  console.log('📸 Converting images...\n');
+  
+  const results = [];
+  for (const imageFile of imageFiles) {
+    const result = await convertSingleImage(imageFile, directory, options);
+    if (result) {
+      results.push(result);
+      console.log(`   ✅ ${result.relativePath} → ${result.webpRelativePath} (${result.savings}% smaller)`);
+    }
+  }
+  
+  return results;
+}
+
+async function convertSingleImage(imagePath, baseDir, options) {
+  try {
+    const stats = await fs.stat(imagePath);
+    const originalSize = stats.size;
+    const relativePath = path.relative(baseDir, imagePath);
+    const ext = path.extname(imagePath).toLowerCase();
+    
+    // Generate WebP filename
+    const webpPath = imagePath.replace(ext, '.webp');
+    const webpRelativePath = relativePath.replace(ext, '.webp');
+    
+    // Convert to WebP
+    await sharp(imagePath)
+      .webp({ quality: 85 })
+      .toFile(webpPath);
+    
+    const webpStats = await fs.stat(webpPath);
+    const webpSize = webpStats.size;
+    const savings = Math.round((1 - webpSize / originalSize) * 100);
+    
+    // Remove original file if replace flag is set
+    if (options.replace) {
+      await fs.remove(imagePath);
+    }
+    
+    return {
+      relativePath,
+      originalSize,
+      webpSize,
+      savings,
+      webpRelativePath,
+      ext
+    };
+    
+  } catch (error) {
+    console.error(`   ❌ Error processing ${imagePath}:`, error.message);
+    return null;
+  }
 }
 
 async function processImage(imagePath, baseDir, options) {
@@ -346,10 +426,10 @@ function displayResultsTable(results, options) {
   const totalWebpSize = results.reduce((sum, r) => sum + r.webpSize, 0);
   const totalSavings = totalOriginalSize > 0 ? Math.round((1 - totalWebpSize / totalOriginalSize) * 100) : 0;
   
-  console.log(`\n📊 Summary:`);
+  console.log(`\n📝 Summary:`);
   console.log(`   Total original size: ${chalk.red(formatFileSize(totalOriginalSize))}`);
   console.log(`   Total WebP size: ${chalk.green(formatFileSize(totalWebpSize))} ${options.write ? '' : '(predicted)'}`);
-  console.log(`   Total space saved: ${chalk.green(formatFileSize(totalOriginalSize - totalWebpSize))} (${chalk.green(totalSavings + '%')})`);
+  console.log(`   Total space saved: ${chalk.green(formatFileSize(totalOriginalSize - totalWebpSize))} (${chalk.green(totalSavings + '%')})\n\n`);
 }
 
 function escapeRegExp(string) {
