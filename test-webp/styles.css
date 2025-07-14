@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('hero-image.jpg');
+    background-image: url('hero-image.webp');
     background-size: cover;
 }
 
@@ -18,10 +18,10 @@ body {
 }
 
 .banner {
-    background: url('banner.gif') no-repeat center;
+    background: url('banner.webp') no-repeat center;
     background-size: cover;
     height: 300px;
     margin: 20px 0;
 }
 
-/* CSS comments mentioning images: logo.png, hero-image.jpg, banner.gif */ 
+/* CSS comments mentioning images: logo.webp, hero-image.webp, banner.webp */ 
